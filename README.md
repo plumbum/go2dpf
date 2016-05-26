@@ -3,10 +3,8 @@ Go to dpf
 
 **Work in progress**
 
-Библиотека для записи изображений на [хакнутую фоторамку](https://sourceforge.net/projects/dpf-ax/).
+go2pdf allows you to record graphics in [hacked photo frames](https://sourceforge.net/projects/dpf-ax/).
 
-Для связи используется [обёртка](https://github.com/deadsy/libusb) вокруг [libusb](http://www.linux-usb.org/).
+For usb use [Go wrapper](https://github.com/deadsy/libusb) around the [libusb](http://www.linux-usb.org/).
 
-Используется фоторамка на базе микроконтроллера [Appotech AX206](http://picframe.spritesserver.nl/wiki/index.php/DPF_with_AppoTech_AX206).
-
-
+Used photo frame based on microcontroller [Appotech AX206](http://picframe.spritesserver.nl/wiki/index.php/DPF_with_AppoTech_AX206).
