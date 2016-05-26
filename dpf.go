@@ -117,7 +117,7 @@ func (dpf *DPF) Blit(img *ImageRGB565) error {
 		byte(r.Max.Y-1), byte((r.Max.Y-1) >> 8),
 		0,
 	}
-	return dpf.scsiWrite(cmd, img.Pix)
+	return dpf.scsiWrite(cmd, img.PixRect())
 }
 
 const scsiTimeout = 1000

@@ -8,10 +8,10 @@ import (
 	"log"
 	"net/http"
 	"os"
-
-	"github.com/plumbum/go2dpf"
 	"os/signal"
 	"syscall"
+
+	"github.com/plumbum/go2dpf"
 )
 
 func main() {
@@ -57,13 +57,21 @@ ForExit:
 				break
 			}
 
-			log.Print("Convert image")
+			r := bgImg.Bounds()
 			img := go2dpf.NewRGB565Image(bgImg)
 
 			log.Print("Put image to DPF")
-			err = dpf.Blit(img)
-			if err != nil {
-				log.Fatal(err)
+			for x := r.Min.X; x < r.Max.X; x += 16 {
+				for y := r.Min.Y; y < r.Max.Y; y += 16 {
+					chunkRect := image.Rect(
+						(x+y) % w, y,
+						(x+y) % w + 16, y + 16)
+					chunk := img.SubImage(chunkRect).(*go2dpf.ImageRGB565)
+					// pp.Println(chunk)
+					if err := dpf.Blit(chunk); err != nil {
+						log.Fatal(err)
+					}
+				}
 			}
 		}
 	}

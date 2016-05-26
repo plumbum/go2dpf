@@ -45,11 +45,11 @@ type ImageRGB565 struct {
 	Rect image.Rectangle
 }
 
-func (p *ImageRGB565) ColorModel() color.Model { return RGB565Model }
+func (p ImageRGB565) ColorModel() color.Model { return RGB565Model }
 
-func (p *ImageRGB565) Bounds() image.Rectangle { return p.Rect }
+func (p ImageRGB565) Bounds() image.Rectangle { return p.Rect }
 
-func (p *ImageRGB565) At(x, y int) color.Color {
+func (p ImageRGB565) At(x, y int) color.Color {
 	return p.RGB565At(x, y)
 }
 
@@ -107,6 +107,7 @@ func (p *ImageRGB565) SubImage(r image.Rectangle) image.Image {
 // Opaque scans the entire image and reports whether it is fully opaque.
 func (p *ImageRGB565) Opaque() bool {
 	return true
+	/*
 	if p.Rect.Empty() {
 		return true
 	}
@@ -121,6 +122,21 @@ func (p *ImageRGB565) Opaque() bool {
 		i1 += p.Stride
 	}
 	return true
+	*/
+}
+
+func (p *ImageRGB565) PixRect() []byte {
+	r := p.Rect
+	bufSize := r.Dx()*r.Dy()*2
+	data := make([]byte, bufSize, bufSize)
+	py := 0
+	dxb := r.Dx()*2
+	for y := r.Min.Y; y < r.Max.Y; y++ {
+		start := p.PixOffset(r.Min.X, y)
+		copy(data[py:], p.Pix[start:start+dxb])
+		py += dxb
+	}
+	return data
 }
 
 // NewRGB565 returns a new RGB565 image with the given bounds.
