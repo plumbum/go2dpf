@@ -51,7 +51,7 @@ ForExit:
 		default:
 
 			log.Print("Load image")
-			bgImg, err := LoremPixel()
+			bgImg, err := LoremPixel(w, h)
 			if err != nil {
 				log.Print(err)
 				break
@@ -71,8 +71,8 @@ ForExit:
 	log.Print("Done")
 }
 
-func LoremPixel() (image.Image, error) {
-	url := "http://lorempixel.com/240/320/"
+func LoremPixel(w, h int) (image.Image, error) {
+	url := fmt.Sprintf("http://lorempixel.com/%d/%d/", w, h)
 	resp, err := http.Get(url)
 	if err != nil {
 		return nil, err
