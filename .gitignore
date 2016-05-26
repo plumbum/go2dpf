@@ -22,3 +22,8 @@ _testmain.go
 *.exe
 *.test
 *.prof
+
+# Jetbrains Idea files
+.idea/
+go2dpf.iml
+
