@@ -105,7 +105,7 @@ func (dpf *DPF) Brightness(lvl int) error {
 	return dpf.scsiWrite(cmd, nil)
 }
 
-func (dpf *DPF) Blit(img *RGB565) error {
+func (dpf *DPF) Blit(img *ImageRGB565) error {
 
 	r := img.Rect
 	cmd := []byte{

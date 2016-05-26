@@ -35,7 +35,7 @@ func rgb565Model(c color.Color) color.Color {
 var RGB565Model color.Model = color.ModelFunc(rgb565Model)
 
 // RGB565 is an in-memory image whose At method returns ColorRGB565 values.
-type RGB565 struct {
+type ImageRGB565 struct {
 	// Pix holds the image's pixels, as alpha values in big-endian format. The pixel at
 	// (x, y) starts at Pix[(y-Rect.Min.Y)*Stride + (x-Rect.Min.X)*2].
 	Pix []uint8
@@ -45,15 +45,15 @@ type RGB565 struct {
 	Rect image.Rectangle
 }
 
-func (p *RGB565) ColorModel() color.Model { return RGB565Model }
+func (p *ImageRGB565) ColorModel() color.Model { return RGB565Model }
 
-func (p *RGB565) Bounds() image.Rectangle { return p.Rect }
+func (p *ImageRGB565) Bounds() image.Rectangle { return p.Rect }
 
-func (p *RGB565) At(x, y int) color.Color {
+func (p *ImageRGB565) At(x, y int) color.Color {
 	return p.RGB565At(x, y)
 }
 
-func (p *RGB565) RGB565At(x, y int) ColorRGB565 {
+func (p *ImageRGB565) RGB565At(x, y int) ColorRGB565 {
 	if !(image.Point{x, y}.In(p.Rect)) {
 		return ColorRGB565{}
 	}
@@ -63,11 +63,11 @@ func (p *RGB565) RGB565At(x, y int) ColorRGB565 {
 
 // PixOffset returns the index of the first element of Pix that corresponds to
 // the pixel at (x, y).
-func (p *RGB565) PixOffset(x, y int) int {
+func (p *ImageRGB565) PixOffset(x, y int) int {
 	return (y-p.Rect.Min.Y)*p.Stride + (x-p.Rect.Min.X)*2
 }
 
-func (p *RGB565) Set(x, y int, c color.Color) {
+func (p *ImageRGB565) Set(x, y int, c color.Color) {
 	if !(image.Point{x, y}.In(p.Rect)) {
 		return
 	}
@@ -77,7 +77,7 @@ func (p *RGB565) Set(x, y int, c color.Color) {
 	p.Pix[i+1] = uint8(c1.C)
 }
 
-func (p *RGB565) SetRGB565(x, y int, c ColorRGB565) {
+func (p *ImageRGB565) SetRGB565(x, y int, c ColorRGB565) {
 	if !(image.Point{x, y}.In(p.Rect)) {
 		return
 	}
@@ -88,16 +88,16 @@ func (p *RGB565) SetRGB565(x, y int, c ColorRGB565) {
 
 // SubImage returns an image representing the portion of the image p visible
 // through r. The returned value shares pixels with the original image.
-func (p *RGB565) SubImage(r image.Rectangle) image.Image {
+func (p *ImageRGB565) SubImage(r image.Rectangle) image.Image {
 	r = r.Intersect(p.Rect)
 	// If r1 and r2 are Rectangles, r1.Intersect(r2) is not guaranteed to be inside
 	// either r1 or r2 if the intersection is empty. Without explicitly checking for
 	// this, the Pix[i:] expression below can panic.
 	if r.Empty() {
-		return &RGB565{}
+		return &ImageRGB565{}
 	}
 	i := p.PixOffset(r.Min.X, r.Min.Y)
-	return &RGB565{
+	return &ImageRGB565{
 		Pix:    p.Pix[i:],
 		Stride: p.Stride,
 		Rect:   r,
@@ -105,7 +105,7 @@ func (p *RGB565) SubImage(r image.Rectangle) image.Image {
 }
 
 // Opaque scans the entire image and reports whether it is fully opaque.
-func (p *RGB565) Opaque() bool {
+func (p *ImageRGB565) Opaque() bool {
 	return true
 	if p.Rect.Empty() {
 		return true
@@ -124,8 +124,8 @@ func (p *RGB565) Opaque() bool {
 }
 
 // NewRGB565 returns a new RGB565 image with the given bounds.
-func NewRGB565(r image.Rectangle) *RGB565 {
+func NewRGB565(r image.Rectangle) *ImageRGB565 {
 	w, h := r.Dx(), r.Dy()
 	pix := make([]uint8, 2*w*h)
-	return &RGB565{pix, 2 * w, r}
+	return &ImageRGB565{pix, 2 * w, r}
 }
