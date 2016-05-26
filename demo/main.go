@@ -58,13 +58,7 @@ ForExit:
 			}
 
 			log.Print("Convert image")
-			r := bgImg.Bounds()
-			img := go2dpf.NewRGB565(r)
-			for y := r.Min.Y; y < r.Max.Y; y++ {
-				for x := r.Min.X; x < r.Max.X; x++ {
-					img.Set(x, y, bgImg.At(x, y))
-				}
-			}
+			img := go2dpf.NewRGB565Image(bgImg)
 
 			log.Print("Put image to DPF")
 			err = dpf.Blit(img)

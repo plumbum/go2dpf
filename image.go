@@ -129,3 +129,16 @@ func NewRGB565(r image.Rectangle) *ImageRGB565 {
 	pix := make([]uint8, 2*w*h)
 	return &ImageRGB565{pix, 2 * w, r}
 }
+
+// NewRGB565 returns RGB565 copy of image
+func NewRGB565Image(src image.Image) *ImageRGB565 {
+	r := src.Bounds()
+	dst := NewRGB565(r)
+	for y := r.Min.Y; y < r.Max.Y; y++ {
+		for x := r.Min.X; x < r.Max.X; x++ {
+			dst.Set(x, y, src.At(x, y))
+		}
+	}
+	return dst
+}
+
